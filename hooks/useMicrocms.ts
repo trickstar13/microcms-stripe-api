@@ -2,7 +2,7 @@ import { useCallback, useEffect, useState } from 'react';
 import { microcmsPostData, microcmsUpdateStyle } from '../lib/microcms';
 import type { Item } from '../types/result';
 
-type UseMicrocms = () => [Item | undefined, (item: Item) => void];
+type UseMicrocms = () => [Item | undefined, (item: any) => void];
 
 export const useMicrocms: UseMicrocms = () => {
   const [id, setId] = useState<string>('');
@@ -11,7 +11,7 @@ export const useMicrocms: UseMicrocms = () => {
   useEffect(() => {
     window.addEventListener('message', (e) => {
       if (
-        e.isTrusted === true &&
+        e.isTrusted &&
         e.data.action === 'MICROCMS_GET_DEFAULT_DATA'
       ) {
         setId(e.data.id);
@@ -19,8 +19,8 @@ export const useMicrocms: UseMicrocms = () => {
         microcmsUpdateStyle({
           id: e.data.id,
           message: {
-            height: 400,
-          },
+            height: 400
+          }
         });
       }
     });
@@ -32,12 +32,12 @@ export const useMicrocms: UseMicrocms = () => {
       microcmsPostData({
         id,
         message: {
-          id: item.ASIN,
-          title: item.ItemInfo.Title.DisplayValue,
-          imageUrl: item.Images.Primary.Large.URL,
+          id: item.id,
+          title: item.name,
+          imageUrl: item.images[0] ? item.images[0] : undefined,
           updatedAt: new Date(),
-          data: item,
-        },
+          data: item
+        }
       });
     },
     [id]

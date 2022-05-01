@@ -29,8 +29,11 @@
 }
 
 .image {
-  max-width: 80px;
+  width: 80px;
+  height: 80px;
+  position: relative;
   margin-right: 24px;
+  flex-shrink: 0;
 }
 
 .contributors {

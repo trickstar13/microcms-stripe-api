@@ -1,5 +1,5 @@
 {
-  "name": "microcms-amazon-pa-api",
+  "name": "microcms-stripe-api",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -9,10 +9,10 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "amazon-paapi": "^1.0.6",
     "next": "12.1.2",
     "react": "18.0.0",
-    "react-dom": "18.0.0"
+    "react-dom": "18.0.0",
+    "stripe": "^8.219.0"
   },
   "devDependencies": {
     "@types/node": "17.0.23",

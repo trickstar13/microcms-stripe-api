@@ -1,9 +1,9 @@
 import type { NextPage } from 'next';
 import Image from 'next/image';
-import { useCallback, useState } from 'react';
-import { useSearch } from '../hooks/useSearch';
-import { useMicrocms } from '../hooks/useMicrocms';
+import React, { useCallback, useState } from 'react';
 import Result from '../components/Result';
+import { useMicrocms } from '../hooks/useMicrocms';
+import { useSearch } from '../hooks/useSearch';
 import styles from '../styles/index.module.css';
 
 const Index: NextPage = () => {
@@ -26,15 +26,19 @@ const Index: NextPage = () => {
       <main className={styles.main}>
         <div className={styles.selected}>
           {data ? (
-            <div className={styles.selectedImage}>
-              <Image
-                src={data.Images.Primary.Large.URL}
-                alt=""
-                width={data.Images.Primary.Large.Width}
-                height={data.Images.Primary.Large.Height}
-              />
-              <p className={styles.title}>{data.ItemInfo.Title.DisplayValue}</p>
-            </div>
+            <>
+              <div className={styles.selectedImage}>
+                {data.images[0] && (
+                  <Image
+                    src={data.images[0]}
+                    layout={'fill'}
+                    alt=''
+                  />
+                )}
+              </div>
+              <p className={styles.title}>ID: {data.id}</p>
+              <p className={styles.title}>{data.name}</p>
+            </>
           ) : (
             <p>選択中のアイテムがありません</p>
           )}
@@ -42,7 +46,7 @@ const Index: NextPage = () => {
         <div className={styles.search}>
           <div className={styles.form}>
             <input
-              type="text"
+              type='text'
               onChange={(e) => setQuery(e.target.value)}
               onKeyDown={onKeyDown}
               className={styles.input}

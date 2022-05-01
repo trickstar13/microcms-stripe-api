@@ -1,8 +1,10 @@
-# microcms-amazon-pa-api
+# microcms-stripe-api
+
+このリポジトリは[microcms-amazon-pa-api](https://github.com/microcmsio/microcms-amazon-pa-api)をベースとして作成されています。
 
 ## 機能
 
-- Amazon の書籍検索
+- Stripe の特定ストアでの商品名検索
 - 商品を選択し、microCMS 側に保存
 
 ## 技術構成
@@ -15,22 +17,14 @@
 
 プロジェクトルートに`.env.local`ファイルを作成し、以下の項目を設定してください。
 
-- ACCESS_KEY（Amazon Product Advertising API のアクセスキー）
-- SECRET_KEY（Amazon Product Advertising API のシークレットキー）
-- PARTNER_TAG（アソシエイトタグ）
-- PARTNER_TYPE（パートナータイプ）
-- MARKET_PLACE（マーケットプレイス）
+- STRIPE_API_KEY（ProductsとPricesの読み取り権限を与えた制限付きのキー）
 - NEXT_PUBLIC_SERVICE_ID（連携する microCMS のサービス ID）
 
 例：
 
 ```
-ACCESS_KEY=xxxxxxxxxxxxxxxxxxxx
-SECRET_KEY=xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
-PARTNER_TAG=xxxxxxx-xx
-PARTNER_TYPE=Associates
-MARKET_PLACE=www.amazon.co.jp
-NEXT_PUBLIC_SERVICE_ID=xxxxxxx
+NEXT_PUBLIC_SERVICE_ID=XXX
+STRIPE_API_KEY=rk_test_XXX
 ```
 
 ## 開発方法

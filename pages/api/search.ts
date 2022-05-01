@@ -1,35 +1,40 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
-import amazonPaApi from 'amazon-paapi';
+import Stripe from 'stripe';
 
-const params = {
-  AccessKey: process.env.ACCESS_KEY,
-  SecretKey: process.env.SECRET_KEY,
-  PartnerTag: process.env.PARTNER_TAG,
-  PartnerType: process.env.PARTNER_TYPE,
-  Marketplace: process.env.MARKET_PLACE,
-};
+const stripeApiKey = process.env.STRIPE_API_KEY || '';
 
-export default function handler(req: NextApiRequest, res: NextApiResponse) {
+export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   const {
-    query: { keywords },
+    query: { keyword }
   } = req;
 
-  amazonPaApi
-    .SearchItems(params, {
-      Keywords: keywords,
-      SearchIndex: 'Books',
-      ItemCount: 10,
-      Resources: [
-        'Images.Primary.Large',
-        'ItemInfo.Title',
-        'ItemInfo.ByLineInfo',
-        'Offers.Listings.Price',
-      ],
-    })
-    .then((data: any) => {
-      res.status(200).json(data);
-    })
-    .catch((error: any) => {
-      res.status(500).send(error);
+
+  // キーワードからクエリを作る
+  const query = keyword ? `active:'true' AND name~"${keyword}"`: "active:'true'";
+
+  // Stripe SDKをセットアップする
+  const stripe = new Stripe(stripeApiKey, {
+    apiVersion: '2020-08-27',
+    maxNetworkRetries: 3
+  });
+
+  try {
+    // 商品データを取得する
+    const products = await stripe.products.search({
+      query
     });
+    if (!products.data || products.data.length < 1) {
+      return res.status(200).json([]);
+    }
+    // 商品の価格データを取得する
+    await Promise.all(products.data.map(async (product, i) => {
+      // @ts-ignore
+      products.data[i].prices = await stripe.prices.list({
+        product: product.id
+      });
+    }));
+    res.status(200).json(products);
+  } catch (error) {
+    res.status(500).send(error);
+  }
 }
