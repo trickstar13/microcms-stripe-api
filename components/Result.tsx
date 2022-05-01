@@ -25,7 +25,7 @@ const Index: React.VFC<Props> = ({ result, error, loading, selectData }) => {
       </div>
     );
   }
-  if (!(result?.data)) {
+  if (result?.data.length === 0) {
     return (
       <div className={styles.empty}>
         <p>検索結果が見つかりません</p>

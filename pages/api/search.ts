@@ -8,7 +8,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     query: { keyword }
   } = req;
 
-
   // キーワードからクエリを作る
   const query = keyword ? `active:'true' AND name~"${keyword}"`: "active:'true'";
 
@@ -23,9 +22,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     const products = await stripe.products.search({
       query
     });
-    if (!products.data || products.data.length < 1) {
-      return res.status(200).json([]);
-    }
     // 商品の価格データを取得する
     await Promise.all(products.data.map(async (product, i) => {
       // @ts-ignore
